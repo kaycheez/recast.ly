@@ -1,9 +1,9 @@
 var VideoList = (props) => (
-  <div className="videos-list">
+  <div className="video-list">
     {/* <div><h5><em>videoListEntry</em> view goes here</h5></div> */}
     {/* <VideoListEntry videos={props.videos}/> */}
     {props.videos.map(video =>
-      <VideoListEntry video={video} />
+      <VideoListEntry video={video} clickAttri={props.clickAttri}/>
     )}
   </div>
 );
