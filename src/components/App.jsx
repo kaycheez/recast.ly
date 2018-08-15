@@ -1,60 +1,65 @@
-// var App = () => (
-//   <div>
-//     <nav className="navbar">
-//       <div className="col-md-6 offset-md-3">
-//         <div><h5><em>search</em> view goes here</h5></div>
-//       </div>
-//     </nav>
-//     <div className="row">
-//       <div className="col-md-7">
-//         {/* <div><h5><em>videoPlayer</em> view goes here</h5></div> */}
-//         <VideoPlayer video={window.exampleVideoData[0]}/>
-//       </div>
-//       <div className="col-md-5">
-//         {/* <div><h5><em>videoList</em> view goes here</h5></div> */}
-//         <VideoList videos={window.exampleVideoData}/>
-//       </div>
-//     </div>
-//   </div>
-// );
-
 class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      // video: window.exampleVideoData,
-      currentVideo: window.exampleVideoData[0]
+      videos: window.exampleVideoData,
+      currentVideo: window.exampleVideoData[0],
+      query: ''
     };
   }
-
+  
   onVideoListClick(video) {
     this.setState({
-      currentVideo: video //HOW!?
+      currentVideo: video 
     });
   }
+
+  onSearchKey(event) {
+    this.setState({
+      query: event.target.value
+    }, () => {
+      this.props.searchYouTube( { query: this.state.query }, (data) => {
+        this.setState({
+          videos: data,
+          currentVideo: data[0]
+        });
+      });
+    });
+    // console.log(this.state.query);
+  }
+
 
   render() {
     return (
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            {/* <div><h5><em>search</em> view goes here</h5></div> */}
-            <Search />
+            <Search onSearchKey={this.onSearchKey.bind(this)} />
           </div>
         </nav>
         <div className="row">
           <div className="col-md-7">
-            {/* <div><h5><em>videoPlayer</em> view goes here</h5></div> */}
             <VideoPlayer video={this.state.currentVideo}/>
           </div>
           <div className="col-md-5">
-            {/* <div><h5><em>videoList</em> view goes here</h5></div> */}
-            <VideoList videos={window.exampleVideoData} clickAttri={this.onVideoListClick.bind(this)} />
+            <VideoList videos={this.state.videos} onVideoListClick={this.onVideoListClick.bind(this)} />
           </div>
         </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    this.options = {
+      query: this.state.query,
+    };
+    this.props.searchYouTube(this.options, (data) => {
+      this.setState({
+        videos: data,
+        currentVideo: data[0]
+      });
+    });
   }
 }
 

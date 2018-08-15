@@ -3,7 +3,7 @@ var VideoList = (props) => (
     {/* <div><h5><em>videoListEntry</em> view goes here</h5></div> */}
     {/* <VideoListEntry videos={props.videos}/> */}
     {props.videos.map(video =>
-      <VideoListEntry video={video} clickAttri={props.clickAttri}/>
+      <VideoListEntry video={video} onVideoListClick={props.onVideoListClick}/>
     )}
   </div>
 );
